@@ -8,11 +8,11 @@
   <body>
     <div class="container">
       <h2>To Register Enter The Mobile Number</h2>
-      <form action="index.html" method="post">
+      
         <label for="username">Mobile Number</label>
         <input type="text" id="username" name="username" placeholder="Enter Mobile Number">
-        <button type="submit">Register</button>
-      </form>
+       <a href="index.html" onclick="localStorage.setItem('number',document.getElementById('username').value)"> <button type="submit">Register</button></a>
+      
     </div>
   </body>
 </html>

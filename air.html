@@ -36,17 +36,21 @@
 
     <div class="maincontainer">
 
-        <div class="button" id="btnWeather">
-                <h2>Weather Status</h2>
-        </div>
-        
-        <div class="button" id="btnAir">
-            <h2>Air Quality</h2>
+        <div class="container">
+            <div class="air-quality">
+                <h2>Air Quality</h2>
+                <p>Current AQI: <span class="aqi"></span></p>
+                <p>Primary Pollutant: <span class="pollutant"></span></p>
+            </div>
         </div>
 
-        <div class="button" id="btnIot">
-            <h2>Iot Devices</h2>
-        </div>
+        <!-- <div class="container">
+            <div class="iot-device">
+                <h2>IoT Device</h2>
+                <p>Status: <span class="status"></span></p>
+                <p>Last Updated: <span class="last-updated"></span></p>
+            </div>
+        </div> -->
     </div>
 
     <script src="https://kit.fontawesome.com/7c8801c017.js" crossorigin="anonymous"></script>
@@ -60,24 +64,6 @@ menuToggle.addEventListener('click', () => {
   menuToggle.classList.toggle('active');
   navMenu.classList.toggle('active');
 });
-    </script>
-
-    <script>
-        const btnWeather = document.getElementById("btnWeather");
-        btnWeather.addEventListener("click", function() {
-        window.location.href = "weather.html";
-        });
-
-        const btnAir = document.getElementById("btnAir");
-        btnAir.addEventListener("click", function() {
-        window.location.href = "air.html";
-        });
-
-        const btnIot = document.getElementById("btnIot");
-        btnIot.addEventListener("click", function() {
-        window.location.href = "iot.html";
-        });
-
     </script>
 
 

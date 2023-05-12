@@ -5,12 +5,40 @@ const weatherDetails = document.querySelector('.weather-details');
 const error404 = document.querySelector('.not-found');
 const gps = document.querySelector('#gps');
 
-function contactiot() {
-    console.log("iot contacted");
+async function contactiot(rain) {
+    console.log(`iot contacted as rainchance ${rain}`);
+
+let headersList = {
+ "Accept": "*/*",
+ "Content-Type": "application/json"
+}
+let number=localStorage.getItem("number");
+if(number==null){
+alert("no iot devices Configured")
+return;
+}
+let bodyContent = JSON.stringify({
+  "to":"trigger@applet.ifttt.com",
+  "subject":number,
+  "text":`There is ${rain}% chance of rain in your area. IOT based Irrigation has been stopped to save water :-)`,
+  "AuthToken":"NjAwNjA1MzQ0N0BuYXppZg=="
+  
+  
+});
+
+let response = await fetch("https://api.techkmr.com/mail/send-mail", { 
+  method: "POST",
+  body: bodyContent,
+  headers: headersList
+});
+
+let data = await response.text();
+console.log(data);
+
 }
 gps.addEventListener('click', () => {
 
-   // const APIKey = '141094484e25bf2f7582d66324f7258c';
+    //const APIKey = '141094484e25bf2f7582d66324f7258c';
 
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition);
@@ -24,7 +52,7 @@ gps.addEventListener('click', () => {
         const longitude = position.coords.longitude;
 
 
-        const url2 = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${APIKey}`
+        const url2 = `https://api.techkmr.com/weather/gps?latitude=${latitude}&longitude=${longitude}`
 
 
         fetch(url2)
@@ -88,7 +116,7 @@ gps.addEventListener('click', () => {
                 let rainChance = 0;
                 if (weather === "Rain") {
                     rainChance = 90; // High chance of rain if it's already raining
-                } else if (weather === "Drizzle" || weather === "Thunderstorm") {
+                } else if (weather === "Drizzle" || weather=="Snow"|| weather === "Thunderstorm") {
                     rainChance = 60; // Moderate chance of rain if it's drizzling or thundering
                 } else if (weather === "Clouds" && clouds >= 75) {
                     rainChance = 40; // Moderate chance of rain if it's mostly cloudy
@@ -98,10 +126,10 @@ gps.addEventListener('click', () => {
                     rainChance = 10; // Very low chance of rain otherwise
                 }
 
-                if (rainChance > 70) {
-                    contactiot();
+                if (rainChance > 59) {
+                    contactiot(rainChance);
                 } else {
-                    console.log("iot Devices not updates")
+                    console.log(`iot Devices not updates ${rainChance}` )
                 }
 
                 weatherBox.style.display = '';
@@ -123,11 +151,11 @@ search.addEventListener('click', () => {
     if (city === '')
         return;
 
-    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${APIKey}`)
+    fetch(`https://api.techkmr.com/weather/city?city=${city}`)
         .then(response => response.json())
         .then(json => {
 
-            if (json.cod === '404') {
+            if (json.cod=== '404') {
                 container.style.height = '400px';
                 weatherBox.style.display = 'none';
                 weatherDetails.style.display = 'none';
@@ -184,7 +212,7 @@ search.addEventListener('click', () => {
             let rainChance = 0;
             if (weather === "Rain") {
                 rainChance = 90; // High chance of rain if it's already raining
-            } else if (weather === "Drizzle" || weather === "Thunderstorm") {
+            } else if (weather === "Drizzle" ||  weather=="Snow" || weather === "Thunderstorm") {
                 rainChance = 60; // Moderate chance of rain if it's drizzling or thundering
             } else if (weather === "Clouds" && clouds >= 75) {
                 rainChance = 40; // Moderate chance of rain if it's mostly cloudy
@@ -194,10 +222,10 @@ search.addEventListener('click', () => {
                 rainChance = 10; // Very low chance of rain otherwise
             }
 
-            if (rainChance > 70) {
-                contactiot();
+            if (rainChance > 59) {
+                contactiot(rainChance);
             } else {
-                console.log("iot Devices not updates")
+                console.log(`iot Devices not updates ${rainChance}`)
             }
 
 
